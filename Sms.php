@@ -53,10 +53,10 @@ class Sms
     }
 
     /**
-     * 签名
+     * 短信签名计算
+     * @param $parameters
+     * @param $accessKeySecret
      *
-     * @param unknown $parameters
-     * @param unknown $accessKeySecret
      * @return string
      */
     protected function computeSignature($parameters, $accessKeySecret) {
