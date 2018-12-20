@@ -4,7 +4,7 @@ go(function(){
     $accessKeyId = '';
     $accessKeySecret = '';
     $params = array (
-        'SignName' => $tmpData['template_sign'],
+        'SignName' => $template_sign, // 模板签名
         'Format' => 'JSON',
         'Version' => '2017-05-25',
         'AccessKeyId' => $accessKeyId,
@@ -13,8 +13,8 @@ go(function(){
         'SignatureNonce' => uniqid(),
         'Timestamp' => gmdate('Y-m-d\TH:i:s\Z'),
         'Action' => 'SendSms',
-        'TemplateCode' => $tmpData['template_code'],
-        'PhoneNumbers' => $phoneItem['mobile'],
+        'TemplateCode' => $template_code, // 模板ID
+        'PhoneNumbers' => $phone, // 手机号
     );
     // 计算签名并把签名结果加入请求参数
     $params['Signature'] = computeSignature($params, $accessKeySecret);
@@ -23,6 +23,7 @@ go(function(){
     $cli = new Swoole\Coroutine\Http\Client('dysmsapi.aliyuncs.com', 80);
     $cli->set(['timeout' => 1]);
     $cli->get('/?'. http_build_query($params));
+    // 也可以并发发送 参考https://wiki.swoole.com/wiki/page/p-coroutine_multi_call.html
     
     // 解析json 获取发送状态
     $smsData = json_decode($cli->body, true);
